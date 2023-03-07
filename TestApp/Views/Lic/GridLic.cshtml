@@ -1,0 +1,58 @@
+@using TestApp.Models
+@model IEnumerable<Lic>
+
+@(Html.DevExtreme().DataGrid<Lic>()
+                        .ShowBorders(true)
+                        .ID("gridLic")
+                        .DataSource(Model, new[] { "Id" })
+                        .Columns(columns =>
+                        {
+                            columns.AddFor(m => m.Name);
+                            columns.AddFor(m => m.NumLc);
+                            columns.AddFor(m => m.RegDate).Format("dd.MM.YYYY");
+                            //columns.AddFor(m => m.EndDate).Format("dd.MM.YYYY").CellTemplate(@<text><span class="<% data.EndMonth < 12 ? 'green' : 'yellow' %>"><%- text %></span></text>);
+                            columns.AddFor(m => m.EndDate).Format("dd.MM.YYYY").CellTemplate(@<text>
+                                <% if(data.EndMonth > 12) {%>
+                                    <span class='green'><%- text%></span>
+                                <%} else if (data.EndMonth >= 6){%>
+                                    <span class="yellow"><%- text%></span>
+                                <%} else {%>
+                                    <span class="red"><%- text%></span>
+                                <%} %>
+                                </text>);
+                            columns.AddFor(m => m.NameHolder);
+                    })
+            .Paging(p => p.PageSize(10))
+            .FilterRow(f => f.Visible(true))
+            .HeaderFilter(f => f.Visible(true))
+            .Selection(s => s.Mode(SelectionMode.Single))
+            .OnSelectionChanged("selection_changed")
+            .Summary(s => s
+            .TotalItems(totalItems =>
+            {
+                totalItems.Add()
+    .ShowInColumn("Name")
+    .DisplayFormat("Всего ЛУ: {0}")
+    .SummaryType(SummaryType.Count);
+            })
+            )
+)
+
+<script>
+    function selection_changed(selectedItems) {
+        var data = selectedItems.selectedRowsData[0];
+        if (data) {
+            $.ajax({
+                url: window.location.origin + "/Well/Get",
+                data: { licId: data.Id },
+                type: "GET",
+                cache: false,
+                async: true,
+                traditional: true,
+                success: function (response) {
+                    $('#divGridWell').html(response);
+                }
+            });
+        }
+    }
+</script>

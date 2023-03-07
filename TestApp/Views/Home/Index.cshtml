@@ -1,0 +1,13 @@
+@using TestApp.Models
+
+@{
+    ViewBag.Title = "";
+}
+
+<div style="padding:50px">
+    <ul id="ulHome">
+        <li>@Html.ActionLink("Сводный отчет по деятельности компаний", "Index", "Holder")</li>
+        <li>@Html.ActionLink("Рабочее место специалиста", "Index", "Lic")</li>
+        <li>@Html.ActionLink("Аналитический модуль", "Index", "Analytics")</li>
+    </ul>
+</div>

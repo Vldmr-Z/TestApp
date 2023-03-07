@@ -1,0 +1,65 @@
+@using TestApp.Models
+@model IEnumerable<Holder>
+
+@{
+    ViewBag.Title = "Сводный отчет по деятельности компаний";
+}
+
+<h2>Сводный отчет по деятельности компаний</h2>
+
+<div id="divRight" style="width:30%; float:left; padding:5px">
+    @(Html.DevExtreme().DataGrid<Holder>()
+                .ID("holderGrid")
+                .ShowBorders(true)
+                .DataSource(Model, new[] { "Name" })
+                .Columns(columns =>
+                {
+                    columns.AddFor(m => m.Name);
+                })
+                .Paging(p => p.PageSize(10))
+                .FilterRow(f => f.Visible(true))
+                .HeaderFilter(f => f.Visible(true))
+                .Selection(s => s.Mode(SelectionMode.Single))
+                .OnSelectionChanged("selection_changed")
+    )
+</div>
+
+<div id="divLeft" style="width:70%; float:left; padding:5px">
+    <div id="holderInfo">
+        <table id="holderInfoTable">
+            <tr>
+                <th colspan="2"><u><span class="holderName"></span></u></th>
+            </tr>
+            <tr>
+                <th>Колиичество ЛУ:</th>
+                <td><span class="holderInfoCnt"></span></td>
+            </tr>
+            <tr>
+                <th>Общая полщадь ЛУ, м2:</th>
+                <td><span class="holderInfoSQM"></span></td>
+            </tr>
+            <tr>
+                <th>Количество скважин:</th>
+                <td><span class="holderInfoWells"></span></td>
+            </tr>
+            <tr>
+                <th>Общий дебит скважин, м3/сутки:</th>
+                <td><span class="holderInfoDebit"></span></td>
+            </tr>
+        </table>
+    </div>    
+</div>
+
+
+<script>
+    function selection_changed(selectedItems) {
+        var data = selectedItems.selectedRowsData[0];
+        if (data) {
+            $(".holderName").text(data.Name);
+            $(".holderInfoCnt").text(data.Cnt);
+            $(".holderInfoSQM").text(data.SQM);
+            $(".holderInfoWells").text(data.Wells);
+            $(".holderInfoDebit").text(data.Debit);
+        }
+    }
+</script>

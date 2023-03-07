@@ -1,0 +1,27 @@
+@using TestApp.Models
+@model IEnumerable<Well>
+
+@(Html.DevExtreme().DataGrid<Well>()
+    .ShowBorders(true)
+    .ID("gridWell")
+    .DataSource(Model,new[] { "Id" })
+    .Selection(s => s.Mode(SelectionMode.Single))
+    .Columns(columns =>
+    {
+        columns.AddFor(m => m.Num);
+        columns.AddFor(m => m.Debit);
+        columns.AddFor(m => m.Type);
+    })
+    .Paging(p => p.PageSize(10))
+    .FilterRow(f => f.Visible(true))
+    .HeaderFilter(f => f.Visible(true))
+    .Summary(s => s
+        .TotalItems(totalItems =>
+        {
+            totalItems.Add()
+            .ShowInColumn("Num")
+            .DisplayFormat("Всего скважин: {0}")
+            .SummaryType(SummaryType.Count);
+        })
+        )
+)

@@ -1,0 +1,23 @@
+@using TestApp.Models
+
+@{
+    ViewBag.Title = "Рабочее место специалиста";
+}
+
+<h2>Рабочее место специалиста</h2>
+
+<div id="divLic" style="width:70%; float:left; padding:5px">
+    <h3>ЛУ</h3>
+    @{
+        Html.RenderAction("Get", "Lic");
+    }
+</div>
+
+<div id="divWell" style="width:30%; float:left; padding:5px">
+    <h3>Скважины</h3>
+    <div id="divGridWell">
+        @{
+            Html.RenderAction("Get", "Well");
+        }
+    </div>
+</div>
