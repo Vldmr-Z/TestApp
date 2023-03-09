@@ -29,6 +29,23 @@ namespace TestApp.Models
             return DtToList(query);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="licId">Идентфикатор месторождения</param>
+        /// <param name="page">Номер "страницы", нумерация "страниц" начинается с "0"</param>
+        /// <param name="rows">Количесвто записей на "странице"</param>
+        /// <returns></returns>
+        public List<Well> GetPartition(Int32? licId = null, Int32? page = 0, Int32? rows = 10)
+        {
+            if (!licId.HasValue)
+                return new List<Well>();
+
+            string query = $"SELECT id, num, type, debit, lic_id FROM gis.v_wells { (licId.HasValue ? " where lic_id = " + licId : string.Empty) } offset {page * rows} limit {rows};";
+
+            return DtToList(query);
+        }
+
         private List<Well> DtToList(string query)
         {
             List<Well> result = new List<Well>();
