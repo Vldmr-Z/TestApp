@@ -41,7 +41,7 @@ namespace TestApp.Models
             if (!licId.HasValue)
                 return new List<Well>();
 
-            string query = $"SELECT id, num, type, debit, lic_id FROM gis.v_wells { (licId.HasValue ? " where lic_id = " + licId : string.Empty) } offset {page * rows} limit {rows};";
+            string query = $"SELECT id, num, type, debit, lic_id FROM gis.v_wells { (licId.HasValue ? " where lic_id = " + licId : string.Empty) } order by num offset {page * rows} limit {rows};";
 
             return DtToList(query);
         }
